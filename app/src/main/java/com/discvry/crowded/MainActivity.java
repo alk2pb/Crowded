@@ -3,6 +3,7 @@ package com.discvry.crowded;
 import java.util.Locale;
 
 import android.app.Activity;
+import android.app.DialogFragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.ActionBar;
@@ -12,6 +13,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -39,6 +41,16 @@ public class MainActivity extends AppCompatActivity
     SectionsPagerAdapter mSectionsPagerAdapter;
 
     /**
+     * The {@link ViewPager} that will host the section contents.
+     */
+    ViewPager mViewPager;
+
+    boolean firstTime = true;
+    boolean firstTime2 = true;
+
+    private GoogleMap mMap; // Might be null if Google Play services APK is not available.
+
+    /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
      */
     private NavigationDrawerFragment mNavigationDrawerFragment;
@@ -48,18 +60,10 @@ public class MainActivity extends AppCompatActivity
      */
     private CharSequence mTitle;
 
-    /**
-     * The {@link ViewPager} that will host the section contents.
-     */
-    ViewPager mViewPager;
-
-    private GoogleMap mMap; // Might be null if Google Play services APK is not available.
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
+        setContentView(R.layout.activity_main2);
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
@@ -78,46 +82,70 @@ public class MainActivity extends AppCompatActivity
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
 
-        setUpMapIfNeeded();
-    }
+        mViewPager.setOffscreenPageLimit(2);
 
-    @Override
-    protected void onResume() {
-        super.onResume();
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffeset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                mNavigationDrawerFragment.selectItem(mViewPager.getCurrentItem());
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
         setUpMapIfNeeded();
     }
 
     @Override
     public void onNavigationDrawerItemSelected(int position) {
-        // update the main content by replacing fragments
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction()
-                .replace(R.id.container, PlaceholderFragment.newInstance(position + 1))
-                .commit();
+        if (!firstTime) {
+//            int currentItem = mViewPager.getCurrentItem();
+//            // update the main content by replacing fragments
+//            FragmentManager fragmentManager = getSupportFragmentManager();
+//            fragmentManager.beginTransaction().hide(mSectionsPagerAdapter.getItem(currentItem))
+//                    .replace(R.id.container, mSectionsPagerAdapter.getItem(position))
+//                    .commit();
+            mViewPager.setCurrentItem(position, true);
+        }
+        else {
+            firstTime = false;
+        }
+
     }
 
-    public void onSectionAttached(int number) {
-        switch (number) {
-            case 1:
-                mTitle = getString(R.string.title_section1);
-                break;
-            case 2:
-                mTitle = getString(R.string.title_section2);
-                break;
-            case 3:
-                mTitle = getString(R.string.title_section3);
-                break;
-            case 4:
-                mTitle = getString(R.string.title_section4);
-                break;
-        }
-    }
+//    public void onSectionAttached(int number) {
+//        switch (number) {
+//            case 1:
+//                mTitle = getString(R.string.title_section1);
+//                break;
+//            case 2:
+//                mTitle = getString(R.string.title_section2);
+//                break;
+//            case 3:
+//                mTitle = getString(R.string.title_section3);
+//                break;
+//        }
+//    }
 
     public void restoreActionBar() {
         ActionBar actionBar = getSupportActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
         actionBar.setDisplayShowTitleEnabled(true);
         actionBar.setTitle(mTitle);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        setUpMapIfNeeded();
     }
 
     @Override
@@ -148,7 +176,6 @@ public class MainActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-
     /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
      * one of the sections/tabs/pages.
@@ -163,16 +190,13 @@ public class MainActivity extends AppCompatActivity
         public Fragment getItem(int position) {
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
-            if (position < 3) {
-                return PlaceholderFragment.newInstance(position + 1);
-            }
-            return MapFragment.newInstance();
+            return PlaceholderFragment.newInstance(position + 1);
         }
 
         @Override
         public int getCount() {
             // Show 4 total pages.
-            return 4;
+            return 3;
         }
 
         @Override
@@ -185,13 +209,10 @@ public class MainActivity extends AppCompatActivity
                     return getString(R.string.title_section2).toUpperCase(l);
                 case 2:
                     return getString(R.string.title_section3).toUpperCase(l);
-                case 3:
-                    return getString(R.string.title_section4).toUpperCase(l);
             }
             return null;
         }
     }
-
     /**
      * A placeholder fragment containing a simple view.
      */
@@ -201,6 +222,7 @@ public class MainActivity extends AppCompatActivity
          * fragment.
          */
         private static final String ARG_SECTION_NUMBER = "section_number";
+        private String TAG = "Log";
 
         /**
          * Returns a new instance of this fragment for the given section
@@ -220,48 +242,30 @@ public class MainActivity extends AppCompatActivity
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+            int sectionNumber = this.getArguments().getInt(ARG_SECTION_NUMBER);
+            String sectionNumberString = Integer.toString(sectionNumber);
+
+            Log.d(TAG, sectionNumberString);
+
+            View rootView;
+            if (sectionNumber < 3) {
+                rootView = inflater.inflate(R.layout.fragment_main, container, false);
+                TextView textView = (TextView) rootView.findViewById(R.id.textView);
+
+                textView.setText(sectionNumberString);
+            }
+            else {
+                rootView = inflater.inflate(R.layout.activity_maps, container, false);
+            }
+
             return rootView;
         }
-
-        @Override
-        public void onAttach(Activity activity) {
-            super.onAttach(activity);
-            ((MainActivity) activity).onSectionAttached(
-                    getArguments().getInt(ARG_SECTION_NUMBER));
-        }
-    }
-
-    /**
-     * A fragment containing a google map
-     */
-    public static class MapFragment extends Fragment {
-        /**
-         * The fragment argument representing the section number for this
-         * fragment.
-         */
-        private static final String ARG_SECTION_NUMBER = "section_number";
-
-        /**
-         * Returns a new instance of this fragment
-         */
-        public static MapFragment newInstance() {
-            MapFragment fragment = new MapFragment();
-            Bundle args = new Bundle();
-            args.putInt(ARG_SECTION_NUMBER, 4);
-            fragment.setArguments(args);
-            return fragment;
-        }
-
-        public MapFragment() {
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.activity_maps, container, false);
-            return rootView;
-        }
+//        @Override
+//        public void onAttach(Activity activity) {
+//            super.onAttach(activity);
+//            ((MainActivity) activity).onSectionAttached(
+//                    getArguments().getInt(ARG_SECTION_NUMBER));
+//        }
     }
 
     /**
@@ -281,7 +285,7 @@ public class MainActivity extends AppCompatActivity
      */
     private void setUpMapIfNeeded() {
         // Do a null check to confirm that we have not already instantiated the map.
-        if (mMap == null) {
+        if (mMap == null && mViewPager.getCurrentItem() == 3) {
             // Try to obtain the map from the SupportMapFragment.
             mMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map))
                     .getMap();
