@@ -46,7 +46,6 @@ public class MainActivity extends AppCompatActivity
     ViewPager mViewPager;
 
     boolean firstTime = true;
-    boolean firstTime2 = true;
 
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
 
