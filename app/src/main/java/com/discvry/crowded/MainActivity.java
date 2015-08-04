@@ -2,8 +2,6 @@ package com.discvry.crowded;
 
 import java.util.Locale;
 
-import android.app.Activity;
-import android.app.DialogFragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.ActionBar;
@@ -14,7 +12,6 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -57,7 +54,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main2);
+        setContentView(R.layout.activity_main);
 
         // Set up the action bar.
         final ActionBar actionBar = getSupportActionBar();
@@ -142,13 +139,6 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-//    public void restoreActionBar() {
-//        ActionBar actionBar = getSupportActionBar();
-//        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
-//        actionBar.setDisplayShowTitleEnabled(true);
-//        actionBar.setTitle(mTitle);
-//    }
-
     @Override
     protected void onResume() {
         super.onResume();
@@ -161,8 +151,7 @@ public class MainActivity extends AppCompatActivity
             // Only show items in the action bar relevant to this screen
             // if the drawer is not showing. Otherwise, let the drawer
             // decide what to show in the action bar.
-            getMenuInflater().inflate(R.menu.main2, menu);
-//            restoreActionBar();
+            getMenuInflater().inflate(R.menu.main, menu);
             return true;
         }
         return super.onCreateOptionsMenu(menu);
@@ -267,12 +256,6 @@ public class MainActivity extends AppCompatActivity
 
             return rootView;
         }
-//        @Override
-//        public void onAttach(Activity activity) {
-//            super.onAttach(activity);
-//            ((MainActivity) activity).onSectionAttached(
-//                    getArguments().getInt(ARG_SECTION_NUMBER));
-//        }
     }
 
     /**
