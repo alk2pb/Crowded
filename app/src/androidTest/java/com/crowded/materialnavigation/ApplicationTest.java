@@ -1,4 +1,4 @@
-package com.crowded.materialnavigation.materialnavigation;
+package com.crowded.materialnavigation;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;
