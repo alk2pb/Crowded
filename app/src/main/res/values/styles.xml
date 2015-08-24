@@ -20,8 +20,14 @@
 
     <style name="AppTheme.SearchView" parent="Widget.AppCompat.SearchView">
         <item name="closeIcon">@drawable/ic_close_black_24dp</item>
+        <!--<item name="suggestionRowLayout">@layout/dropdown_layout</item>-->
         <item name="android:maxWidth">99999dp</item>
+        <!--<item name="layout">@layout/search_layout</item>-->
     </style>
+
+    <!--<style name="suggestions" parent="Widget.AppCompat.Light.AutoCompleteTextView">-->
+        <!--<item name="android:width">10dp</item>-->
+    <!--</style>-->
 
 </resources>
 

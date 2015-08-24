@@ -17,20 +17,24 @@ package com.crowded.materialnavigation;
  */
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-public class ContentFragment extends Fragment {
+public class ContentFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
     // Store instance variables
+    private SwipeRefreshLayout swipeLayout;
 
     // newInstance constructor for creating fragment with arguments
     public static ContentFragment newInstance(int pageIndex) {
         ContentFragment contentFragment = new ContentFragment();
         Bundle args = new Bundle();
         args.putInt("pageIndex", pageIndex);
+
         contentFragment.setArguments(args);
         return contentFragment;
     }
@@ -50,7 +54,25 @@ public class ContentFragment extends Fragment {
                 tvSection.append("\ntest");
             }
         }
+
+        swipeLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_container);
+        swipeLayout.setOnRefreshListener(this);
+        swipeLayout.setColorSchemeResources(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
         return view;
 
     }
+
+    @Override
+    public void onRefresh() {
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                swipeLayout.setRefreshing(false);
+            }
+        }, 5000);
+    }
+
 }

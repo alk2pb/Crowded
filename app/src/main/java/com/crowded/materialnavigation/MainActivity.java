@@ -1,17 +1,26 @@
 package com.crowded.materialnavigation;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.database.AbstractCursor;
+import android.database.Cursor;
+import android.database.MatrixCursor;
+import android.graphics.Rect;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.SimpleCursorAdapter;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.support.design.widget.FloatingActionButton;
+import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,10 +28,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
     private ActionBarDrawerToggle mDrawerToggle;
@@ -40,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this,TempActivity.class);
+                Intent intent = new Intent(MainActivity.this, TempActivity.class);
                 startActivity(intent);
             }
         });
@@ -55,7 +69,6 @@ public class MainActivity extends AppCompatActivity {
 //        toolbar.setContentInsetsRelative(0, 0);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setElevation(0);
 
         try {
             assert actionBar != null;
@@ -160,11 +173,28 @@ public class MainActivity extends AppCompatActivity {
         MenuItem searchItem = menu.findItem(R.id.action_search);
 
         if (searchItem != null) {
-            SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+            final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
             searchView.setBackgroundResource(R.drawable.drop_shadow);
-            ((EditText)searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text)).setHint("Search...");
-            ((EditText)searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text)).setTextColor(0x8A000000);
-            ((EditText)searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text)).setHintTextColor(0x1F000000);
+
+            EditText searchViewText = (EditText)searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
+            searchViewText.setHint("Search...");
+            searchViewText.setTextColor(0x8A000000);
+            searchViewText.setHintTextColor(0x1F000000);
+
+            searchView.setSuggestionsAdapter(new SearchSuggestionsAdapter(this));
+            searchView.setOnSuggestionListener(new SearchView.OnSuggestionListener() {
+                @Override
+                public boolean onSuggestionClick(int position) {
+                    Toast.makeText(MainActivity.this, "Position: " + position, Toast.LENGTH_SHORT).show();
+                    searchView.clearFocus();
+                    return true;
+                }
+
+                @Override
+                public boolean onSuggestionSelect(int position) {
+                    return false;
+                }
+            });
 
             // use this method for search process
             searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -172,6 +202,7 @@ public class MainActivity extends AppCompatActivity {
                 public boolean onQueryTextSubmit(String query) {
                     // use this method when query submitted
                     Toast.makeText(MainActivity.this, query, Toast.LENGTH_SHORT).show();
+                    searchView.clearFocus();
                     return false;
                 }
 
@@ -181,6 +212,36 @@ public class MainActivity extends AppCompatActivity {
                     return false;
                 }
             });
+
+            final AutoCompleteTextView autoComplete = (AutoCompleteTextView)searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
+
+
+            final View dropDownAnchor = searchView.findViewById(autoComplete.getDropDownAnchor());
+            if (dropDownAnchor != null) {
+                dropDownAnchor.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+                    @Override
+                    public void onLayoutChange(View v, int left, int top, int right, int bottom,
+                                               int oldLeft, int oldTop, int oldRight, int oldBottom) {
+
+                        // calculate width of DropdownView
+
+
+                        int point[] = new int[2];
+                        dropDownAnchor.getLocationOnScreen(point);
+                        // x coordinate of DropDownView
+                        int dropDownPadding = point[0] + autoComplete.getDropDownHorizontalOffset();
+
+                        Rect screenSize = new Rect();
+                        getWindowManager().getDefaultDisplay().getRectSize(screenSize);
+                        // screen width
+                        int screenWidth = screenSize.width();
+
+                        // set DropDownView width
+                        autoComplete.setDropDownWidth(screenWidth - dropDownPadding * 2);
+                    }
+                });
+            }
+
 
         }
         return super.onCreateOptionsMenu(menu);
@@ -203,6 +264,109 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
         }*/
 
-        return item.getItemId() == R.id.action_settings || super.onOptionsItemSelected(item);
+        return /*item.getItemId() == R.id.action_settings ||*/ super.onOptionsItemSelected(item);
+    }
+
+    public static class SearchSuggestionsAdapter extends SimpleCursorAdapter
+    {
+        private static final String[] mFields  = { "_id", "result" };
+        private static final String[] mVisible = { "result" };
+        private static final int[]    mViewIds = { android.R.id.text1 };
+
+
+        public SearchSuggestionsAdapter(Context context)
+        {
+            super(context, R.layout.suggestion_layout, null, mVisible, mViewIds, 0);
+        }
+
+        @Override
+        public Cursor runQueryOnBackgroundThread(CharSequence constraint)
+        {
+            return new SuggestionsCursor(constraint);
+        }
+
+        private static class SuggestionsCursor extends AbstractCursor
+        {
+            private ArrayList<String> mResults;
+
+            public SuggestionsCursor(CharSequence constraint)
+            {
+                final int count = 100;
+                mResults = new ArrayList<>(count);
+                for(int i = 0; i < count; i++){
+                    mResults.add("Result " + (i + 1));
+                }
+                if(!TextUtils.isEmpty(constraint)){
+                    String constraintString = constraint.toString().toLowerCase(Locale.ROOT);
+                    Iterator<String> iter = mResults.iterator();
+                    while(iter.hasNext()){
+                        if(!iter.next().toLowerCase(Locale.ROOT).startsWith(constraintString))
+                        {
+                            iter.remove();
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public int getCount()
+            {
+                return mResults.size();
+            }
+
+            @Override
+            public String[] getColumnNames()
+            {
+                return mFields;
+            }
+
+            @Override
+            public long getLong(int column)
+            {
+                if(column == 0){
+                    return mPos;
+                }
+                throw new UnsupportedOperationException("unimplemented");
+            }
+
+            @Override
+            public String getString(int column)
+            {
+                if(column == 1){
+                    return mResults.get(mPos);
+                }
+                throw new UnsupportedOperationException("unimplemented");
+            }
+
+            @Override
+            public short getShort(int column)
+            {
+                throw new UnsupportedOperationException("unimplemented");
+            }
+
+            @Override
+            public int getInt(int column)
+            {
+                throw new UnsupportedOperationException("unimplemented");
+            }
+
+            @Override
+            public float getFloat(int column)
+            {
+                throw new UnsupportedOperationException("unimplemented");
+            }
+
+            @Override
+            public double getDouble(int column)
+            {
+                throw new UnsupportedOperationException("unimplemented");
+            }
+
+            @Override
+            public boolean isNull(int column)
+            {
+                return false;
+            }
+        }
     }
 }
