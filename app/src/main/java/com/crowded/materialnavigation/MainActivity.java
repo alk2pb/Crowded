@@ -205,6 +205,7 @@ public class MainActivity extends AppCompatActivity {
             autoComplete.setHint("Search...");
             autoComplete.setTextColor(0x8A000000);
             autoComplete.setHintTextColor(0x1F000000);
+            Log.d("LOG",Float.toString(pixelsToSp(MainActivity.this,autoComplete.getTextSize())));
 
             searchView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
@@ -409,7 +410,7 @@ public class MainActivity extends AppCompatActivity {
 
             public SuggestionsCursor(CharSequence constraint)
             {
-                final int count = 100;
+                final int count = 4;
                 mResults = new ArrayList<>(count);
                 for(int i = 0; i < count; i++){
                     mResults.add("Result " + (i + 1));
@@ -506,5 +507,9 @@ public class MainActivity extends AppCompatActivity {
                 return false;
             }
         }
+    }
+    public static float pixelsToSp(Context context, float px) {
+        float scaledDensity = context.getResources().getDisplayMetrics().scaledDensity;
+        return px/scaledDensity;
     }
 }
