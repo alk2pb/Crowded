@@ -20,12 +20,21 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 public class ContentFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
+    private RecyclerView mRecyclerView;
+    private RecyclerView.Adapter mAdapter;
+    private RecyclerView.LayoutManager mLayoutManager;
+
     // Store instance variables
     private SwipeRefreshLayout swipeLayout;
 
@@ -48,11 +57,11 @@ public class ContentFragment extends Fragment implements SwipeRefreshLayout.OnRe
         if (bundle != null) {
             int pageIndex = bundle.getInt("pageIndex", 0);
 
-            TextView tvSection = (TextView) view.findViewById(R.id.tvSection);
-            tvSection.setText(getString(R.string.page) + " " + String.valueOf(pageIndex + 1));
-            for (int i=1;i<100;i++) {
-                tvSection.append("\ntest");
-            }
+//            TextView tvSection = (TextView) view.findViewById(R.id.tvSection);
+//            tvSection.setText(getString(R.string.page) + " " + String.valueOf(pageIndex + 1));
+//            for (int i=1;i<100;i++) {
+//                tvSection.append("\ntest");
+//            }
         }
 
         swipeLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_container);
@@ -61,8 +70,32 @@ public class ContentFragment extends Fragment implements SwipeRefreshLayout.OnRe
                 android.R.color.holo_green_light,
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
+
+        mRecyclerView = (RecyclerView) view.findViewById(R.id.my_recycler_view);
+        // use this setting to improve performance if you know that changes
+        // in content do not change the layout size of the RecyclerView
+        mRecyclerView.setHasFixedSize(true);
+
+        // use a linear layout manager
+        mLayoutManager = new LinearLayoutManager(mRecyclerView.getContext());
+        mRecyclerView.setLayoutManager(mLayoutManager);
+
+        // specify an adapter (see also next example)
+        mAdapter = new MyAdapter(getActivity(),
+                getRandomSublist(Cheeses.sCheeseStrings, 30));
+        mRecyclerView.setAdapter(mAdapter);
+
         return view;
 
+    }
+
+    private List<String> getRandomSublist(String[] array, int amount) {
+        ArrayList<String> list = new ArrayList<>(amount);
+        Random random = new Random();
+        while (list.size() < amount) {
+            list.add(array[random.nextInt(array.length)]);
+        }
+        return list;
     }
 
     @Override

@@ -5,26 +5,22 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.database.AbstractCursor;
 import android.database.Cursor;
-import android.database.MatrixCursor;
-import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SimpleCursorAdapter;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.support.design.widget.FloatingActionButton;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -32,7 +28,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -194,7 +189,6 @@ public class MainActivity extends AppCompatActivity {
 //            final EditText searchViewText = (EditText)searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
             autoComplete = (AutoCompleteTextView)searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
 
-
             autoComplete.setOnDismissListener(new AutoCompleteTextView.OnDismissListener() {
                 @Override
                 public void onDismiss() {
@@ -205,7 +199,7 @@ public class MainActivity extends AppCompatActivity {
             autoComplete.setHint("Search...");
             autoComplete.setTextColor(0x8A000000);
             autoComplete.setHintTextColor(0x1F000000);
-            Log.d("LOG",Float.toString(pixelsToSp(MainActivity.this,autoComplete.getTextSize())));
+            Log.d("LOG",Float.toString(pixelsToSp(MainActivity.this, autoComplete.getTextSize())));
 
             searchView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override

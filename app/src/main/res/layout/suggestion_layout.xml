@@ -37,17 +37,24 @@
             android:layout_height="wrap_content"
             android:text="CategoryId"
             android:gravity="center_vertical"
-            android:layout_weight="1"
-            android:textSize="18sp" />
+            android:layout_weight="1" />
 
-        <TextView android:layout_height="wrap_content"
-            android:layout_width="fill_parent"
-            android:layout_weight="1"
-            android:textColor="#8A000000"
-            android:gravity="center_vertical|right"
-            android:id="@+id/description"
-            android:text="Description"
-            android:textSize="18sp" />
+        <!--<TextView android:layout_height="wrap_content"-->
+            <!--android:layout_width="fill_parent"-->
+            <!--android:layout_weight="1"-->
+            <!--android:textColor="#8A000000"-->
+            <!--android:gravity="center_vertical|right"-->
+            <!--android:id="@+id/description"-->
+            <!--android:text="Description" />-->
+
+        <!--<TextView android:layout_height="wrap_content"-->
+            <!--android:layout_width="fill_parent"-->
+            <!--android:layout_weight="1"-->
+            <!--android:textColor="#8A000000"-->
+            <!--android:gravity="center_vertical|right"-->
+            <!--android:id="@+id/description"-->
+            <!--android:text="Description"-->
+            <!--android:textSize="18sp" />-->
     </TableRow>
 
 </TableLayout>
