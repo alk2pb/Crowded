@@ -33,6 +33,20 @@
     <style name="suggestions_background" parent="Widget.AppCompat.AutoCompleteTextView">
         <item name="android:popupBackground">@drawable/background</item>
         <item name="android:popupElevation">0dp</item>
+        <item name="android:popupAnimationStyle">@style/popup_animation</item>
+        <item name="android:popupWindowStyle">@style/popup_style</item>
+        <item name="android:popupMenuStyle">@style/popup_style</item>
+        <item name="android:popupTheme">@style/popup_style</item>
+        <item name="android:listPopupWindowStyle">@style/popup_style</item>
+    </style>
+
+    <style name="popup_animation" parent="Widget.AppCompat.PopupMenu">
+        <item name="android:windowEnterAnimation">@anim/abc_popup_enter</item>
+        <item name="android:windowExitAnimation">@anim/abc_popup_exit</item>
+    </style>
+
+    <style name="popup_style" parent="Widget.AppCompat.PopupMenu">
+        <item name="android:windowCloseOnTouchOutside">false</item>
     </style>
 </resources>
 

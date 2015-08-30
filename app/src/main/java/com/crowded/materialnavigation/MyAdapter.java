@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.List;
@@ -20,14 +21,16 @@ public class MyAdapter
 //        public String mBoundString;
 
         public final View mView;
-//        public final ImageView mImageView;
+        public final ImageView mImageView;
         public final TextView mTextView;
+        public final TextView mTextView2;
 
         public ViewHolder(View view) {
             super(view);
             mView = view;
-//            mImageView = (ImageView) view.findViewById(R.id.search_mag_icon);
+            mImageView = (ImageView) view.findViewById(R.id.avatar);
             mTextView = (TextView) view.findViewById(R.id.info_text);
+            mTextView2 = (TextView) view.findViewById(R.id.info_text_2);
         }
 
         @Override
@@ -57,7 +60,8 @@ public class MyAdapter
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
 //        holder.mBoundString = mValues.get(position);
-        holder.mTextView.setText(mValues.get(position));
+//        holder.mTextView.setText(mValues.get(position));
+        holder.mTextView2.setText(mValues.get(position));
 
 //        holder.mView.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -70,10 +74,7 @@ public class MyAdapter
 //            }
 //        });
 
-//        Glide.with(holder.mImageView.getContext())
-//                .load(Cheeses.getRandomCheeseDrawable())
-//                .fitCenter()
-//                .into(holder.mImageView);
+        holder.mImageView.setImageResource(Cheeses.getRandomCheeseDrawable());
     }
 
     @Override

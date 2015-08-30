@@ -48,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
     {
         UIHandler = new Handler(Looper.getMainLooper());
     }
+
     public static void runOnUI(Runnable runnable) {
         UIHandler.post(runnable);
     }
@@ -75,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
     private void setUpNavigationDrawer() {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-//        toolbar.setContentInsetsRelative(0, 0);
+        toolbar.setContentInsetsRelative(0, 0);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
 
@@ -185,47 +186,30 @@ public class MainActivity extends AppCompatActivity {
             searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
             searchView.setBackgroundResource(R.drawable.drop_shadow);
 
-
-//            final EditText searchViewText = (EditText)searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
             autoComplete = (AutoCompleteTextView)searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
+            autoComplete.setHint("Search...");
+            autoComplete.setTextColor(0x8A000000);
+            autoComplete.setHintTextColor(0x1F000000);
+//            Log.d("LOG",Float.toString(pixelsToSp(MainActivity.this, autoComplete.getTextSize())));
+
 
             autoComplete.setOnDismissListener(new AutoCompleteTextView.OnDismissListener() {
                 @Override
                 public void onDismiss() {
                     searchView.setBackgroundResource(R.drawable.drop_shadow);
-                }
-            });
-
-            autoComplete.setHint("Search...");
-            autoComplete.setTextColor(0x8A000000);
-            autoComplete.setHintTextColor(0x1F000000);
-            Log.d("LOG",Float.toString(pixelsToSp(MainActivity.this, autoComplete.getTextSize())));
-
-            searchView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-                @Override
-                public void onFocusChange(View v, boolean hasFocus) {
-
-//                    if (autoComplete.isPopupShowing()) {
-//                        searchView.setBackgroundResource(R.drawable.drop_shadow2);
-//                    } else {
-//                        searchView.setBackgroundResource(R.drawable.drop_shadow);
-//                    }
-                }
-            });
-
-            searchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
-                @Override
-                public void onFocusChange(View v, boolean hasFocus) {
-//                    if (autoComplete.isPopupShowing()) {
-//                        searchView.setBackgroundResource(R.drawable.drop_shadow2);
-//                    } else {
-//                        searchView.setBackgroundResource(R.drawable.drop_shadow);
-//                    }
+//                    autoComplete.showDropDown();
                 }
             });
 
             searchView.setSuggestionsAdapter(new SearchSuggestionsAdapter(this));
-//            searchView.getSuggestionsAdapter().getDropDownView
+
+//            autoComplete.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+////                    autoComplete.dismissDropDown();
+////                    Log.d("LOG","TEST");
+//                }
+//            });
 
             searchView.setOnSuggestionListener(new SearchView.OnSuggestionListener() {
 
@@ -255,68 +239,20 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public boolean onQueryTextChange(String newText) {
                     // use this method for auto complete search process
-//                    if (autoComplete.isPopupShowing()) {
-//                        searchView.setBackgroundResource(R.drawable.drop_shadow2);
-//                    }
-//                    else {
-//                        searchView.setBackgroundResource(R.drawable.drop_shadow);
-//                    }
                     return false;
                 }
             });
 
             final View dropDownAnchor = searchView.findViewById(autoComplete.getDropDownAnchor());
 
-
             if (dropDownAnchor != null) {
                 dropDownAnchor.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
                     @Override
                     public void onLayoutChange(View v, int left, int top, int right, int bottom,
                                                int oldLeft, int oldTop, int oldRight, int oldBottom) {
-
-//                        int point2[] = new int[2];
-                        // calculate width of DropdownView
-//                        autoComplete.setDropDownHorizontalOffset(10);
-//                        searchView.getLocationOnScreen(point2);
-
-
                         autoComplete.setDropDownWidth(searchView.getWidth());
                         autoComplete.setDropDownHorizontalOffset(0 - autoComplete.getPaddingLeft() - 4);
                         autoComplete.setDropDownVerticalOffset(14);
-
-//                        autoComplete.setDropDownBackgroundResource(R.drawable.background);
-
-
-//                        int point[] = new int[2];
-//                        dropDownAnchor.getLocationOnScreen(point);
-//                        // x coordinate of DropDownView
-//                        int dropDownPadding = point[0] + autoComplete.getDropDownHorizontalOffset();
-//
-//                        Rect screenSize = new Rect();
-//                        getWindowManager().getDefaultDisplay().getRectSize(screenSize);
-//                        // screen width
-//                        int screenWidth = screenSize.width();
-//
-//                        // set DropDownView width
-//                        autoComplete.setDropDownWidth(screenWidth - dropDownPadding * 2);
-
-//                        if (check) {
-//                            searchView.setBackgroundResource(R.drawable.drop_shadow);
-//                            check=false;
-//                        }
-//                        else {
-//                            searchView.setBackgroundResource(R.drawable.drop_shadow2);
-//                            check=true;
-//                        }
-
-//                        if (autoComplete.isPopupShowing()) {
-////                searchView.setBackgroundResource(R.drawable.drop_shadow2);
-//                            Log.d("TAG","POPUP SHOWING");
-//                        }
-//                        else {
-////                searchView.setBackgroundResource(R.drawable.drop_shadow);
-//                            Log.d("TAG","POPUP NOT SHOWING");
-//                        }
                     }
 
                 });
@@ -358,40 +294,6 @@ public class MainActivity extends AppCompatActivity {
             super(context, R.layout.suggestion_layout, null, mVisible, mViewIds, 0);
         }
 
-//        @Override
-//        public View getDropDownView(int position, View convertView, ViewGroup parent){
-//            View view = super.getView(position, convertView, parent);
-////            view.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
-////                @Override
-////                public void onViewAttachedToWindow(View v) {
-////                    Log.d("TAG","TESTTESTTESTTESTTESTTESTTESTTESTTESTTEST");
-////                }
-////
-////                @Override
-////                public void onViewDetachedFromWindow(View v) {
-////                    Log.d("TAG","TESTTESTTESTTESTTESTTESTTESTTESTTESTTEST");
-////                }
-////            });
-//
-////            view.setOnSystemUiVisibilityChangeListener(new View.OnSystemUiVisibilityChangeListener() {
-////                @Override
-////                public void onSystemUiVisibilityChange(int visibility) {
-////                    Log.d("TAG","TESTTESTTESTTESTTESTTESTTESTTESTTESTTEST");
-////                }
-////            });
-//
-////            view.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
-////                @Override
-////                public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
-////                    Log.d("TAG","TESTTESTTESTTESTTESTTESTTESTTESTTESTTEST");
-////                }
-////            });
-////            Log.d("TAG","TESTTESTTESTTESTTESTTESTTESTTESTTESTTEST");
-////            TextView tv=(TextView) view.findViewById(R.id.spinnertarget);
-////            tv.setTextColor(Color.BLACK);
-//            return view;
-//        }
-
         @Override
         public Cursor runQueryOnBackgroundThread(CharSequence constraint)
         {
@@ -420,9 +322,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
 
-
                 if (mResults.size() > 0 && constraint != null && constraint.length() > 1) {
-//                    Log.d("TAG","TEST");
                     MainActivity.runOnUI(new Runnable() {
                         public void run() {
                             MainActivity.searchView.setBackgroundResource(R.drawable.drop_shadow2);
@@ -431,8 +331,6 @@ public class MainActivity extends AppCompatActivity {
 
                 }
                 else {
-//                    Log.d("TAG","TEST2");
-
                     MainActivity.runOnUI(new Runnable() {
                         public void run() {
                             MainActivity.searchView.setBackgroundResource(R.drawable.drop_shadow);
@@ -502,8 +400,9 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
-    public static float pixelsToSp(Context context, float px) {
-        float scaledDensity = context.getResources().getDisplayMetrics().scaledDensity;
-        return px/scaledDensity;
-    }
+
+//    public static float pixelsToSp(Context context, float px) {
+//        float scaledDensity = context.getResources().getDisplayMetrics().scaledDensity;
+//        return px/scaledDensity;
+//    }
 }
