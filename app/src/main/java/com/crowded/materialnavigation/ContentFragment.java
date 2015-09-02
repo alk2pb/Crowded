@@ -104,8 +104,12 @@ public class ContentFragment extends Fragment implements SwipeRefreshLayout.OnRe
             @Override
             public void run() {
                 swipeLayout.setRefreshing(false);
+                // specify an adapter (see also next example)
+                mAdapter = new MyAdapter(getActivity(),
+                        getRandomSublist(Cheeses.sCheeseStrings, 30));
+                mRecyclerView.setAdapter(mAdapter);
             }
-        }, 5000);
+        }, 2000);
     }
 
 }
