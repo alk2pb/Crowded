@@ -10,8 +10,8 @@ import android.widget.TextView;
 
 import java.util.List;
 
-public class MyAdapter
-        extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
+public class CardAdapter
+        extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
 
 //    private final TypedValue mTypedValue = new TypedValue();
 //    private int mBackground;
@@ -43,7 +43,7 @@ public class MyAdapter
         return mValues.get(position);
     }
 
-    public MyAdapter(Context context, List<String> items) {
+    public CardAdapter(Context context, List<String> items) {
 //        context.getTheme().resolveAttribute(R.attr.selectableItemBackground, mTypedValue, true);
 //        mBackground = mTypedValue.resourceId;
         mValues = items;

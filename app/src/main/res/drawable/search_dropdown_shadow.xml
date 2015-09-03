@@ -12,7 +12,7 @@
                 <!--<shape android:shape="rectangle">-->
                 <!--<corners android:radius="2dp" />-->
                 <!--</shape>-->
-                <nine-patch android:src="@drawable/shadow_95243"></nine-patch>
+                <nine-patch android:src="@drawable/search_dropdown_shadow_image"/>
 
             </item>
 

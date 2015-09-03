@@ -86,7 +86,7 @@
             <!--android:layout_weight="1"-->
             <!--android:layout_gravity="center_vertical"-->
             <!--android:orientation="horizontal"-->
-            <!--android:background="?android:attr/searchViewTextField">-->
+            <!--android:search_dropdown_shadow="?android:attr/searchViewTextField">-->
 
             <!--<view class="android.widget.SearchView$SearchAutoComplete"-->
                 <!--android:id="@+id/search_src_text"-->
@@ -99,7 +99,7 @@
                 <!--android:paddingEnd="@dimen/dropdownitem_text_padding_right"-->
                 <!--android:singleLine="true"-->
                 <!--android:ellipsize="end"-->
-                <!--android:background="@null"-->
+                <!--android:search_dropdown_shadow="@null"-->
                 <!--android:inputType="text|textAutoComplete|textNoSuggestions"-->
                 <!--android:imeOptions="actionSearch"-->
                 <!--android:dropDownHeight="wrap_content"-->
@@ -116,7 +116,7 @@
                 <!--android:paddingStart="8dip"-->
                 <!--android:paddingEnd="8dip"-->
                 <!--android:layout_gravity="center_vertical"-->
-                <!--android:background="?android:attr/selectableItemBackground"-->
+                <!--android:search_dropdown_shadow="?android:attr/selectableItemBackground"-->
                 <!--android:src="?android:attr/searchViewCloseIcon"-->
                 <!--android:focusable="true"-->
                 <!--android:contentDescription="@string/searchview_description_clear"-->
@@ -129,7 +129,7 @@
             <!--android:orientation="horizontal"-->
             <!--android:layout_width="wrap_content"-->
             <!--android:layout_height="match_parent"-->
-            <!--android:background="?android:attr/searchViewTextFieldRight">-->
+            <!--android:search_dropdown_shadow="?android:attr/searchViewTextFieldRight">-->
 
             <!--<ImageView-->
                 <!--android:id="@+id/search_go_btn"-->
@@ -138,7 +138,7 @@
                 <!--android:layout_gravity="center_vertical"-->
                 <!--android:paddingStart="16dip"-->
                 <!--android:paddingEnd="16dip"-->
-                <!--android:background="?android:attr/selectableItemBackground"-->
+                <!--android:search_dropdown_shadow="?android:attr/selectableItemBackground"-->
                 <!--android:src="?android:attr/searchViewGoIcon"-->
                 <!--android:visibility="gone"-->
                 <!--android:focusable="true"-->
@@ -153,7 +153,7 @@
                 <!--android:paddingStart="16dip"-->
                 <!--android:paddingEnd="16dip"-->
                 <!--android:src="?android:attr/searchViewVoiceIcon"-->
-                <!--android:background="?android:attr/selectableItemBackground"-->
+                <!--android:search_dropdown_shadow="?android:attr/selectableItemBackground"-->
                 <!--android:visibility="gone"-->
                 <!--android:focusable="true"-->
                 <!--android:contentDescription="@string/searchview_description_voice"-->

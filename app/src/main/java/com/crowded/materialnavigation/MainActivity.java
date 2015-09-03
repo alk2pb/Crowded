@@ -20,7 +20,6 @@ import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -184,7 +183,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (searchItem != null) {
             searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
-            searchView.setBackgroundResource(R.drawable.drop_shadow);
+            searchView.setBackgroundResource(R.drawable.search_shadow_collapsed);
 
             autoComplete = (AutoCompleteTextView)searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
             autoComplete.setHint("Search...");
@@ -196,7 +195,7 @@ public class MainActivity extends AppCompatActivity {
             autoComplete.setOnDismissListener(new AutoCompleteTextView.OnDismissListener() {
                 @Override
                 public void onDismiss() {
-                    searchView.setBackgroundResource(R.drawable.drop_shadow);
+                    searchView.setBackgroundResource(R.drawable.search_shadow_collapsed);
 //                    autoComplete.showDropDown();
                 }
             });
@@ -325,7 +324,7 @@ public class MainActivity extends AppCompatActivity {
                 if (mResults.size() > 0 && constraint != null && constraint.length() > 1) {
                     MainActivity.runOnUI(new Runnable() {
                         public void run() {
-                            MainActivity.searchView.setBackgroundResource(R.drawable.drop_shadow2);
+                            MainActivity.searchView.setBackgroundResource(R.drawable.search_shadow_expanded);
                         }
                     });
 
@@ -333,7 +332,7 @@ public class MainActivity extends AppCompatActivity {
                 else {
                     MainActivity.runOnUI(new Runnable() {
                         public void run() {
-                            MainActivity.searchView.setBackgroundResource(R.drawable.drop_shadow);
+                            MainActivity.searchView.setBackgroundResource(R.drawable.search_shadow_collapsed);
                         }
                     });
                 }

@@ -31,7 +31,7 @@
     <!--</style>-->
 
     <style name="suggestions_background" parent="Widget.AppCompat.AutoCompleteTextView">
-        <item name="android:popupBackground">@drawable/background</item>
+        <item name="android:popupBackground">@drawable/search_dropdown_shadow</item>
         <item name="android:popupElevation">0dp</item>
         <item name="android:popupAnimationStyle">@style/popup_animation</item>
         <item name="android:popupWindowStyle">@style/popup_style</item>
