@@ -3,8 +3,6 @@ package com.crowded.materialnavigation;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.database.AbstractCursor;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -12,13 +10,11 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -30,10 +26,6 @@ import android.widget.AutoCompleteTextView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
-
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
     private ActionBarDrawerToggle mDrawerToggle;
@@ -281,127 +273,8 @@ public class MainActivity extends AppCompatActivity {
         return /*item.getItemId() == R.id.action_settings ||*/ super.onOptionsItemSelected(item);
     }
 
-    public static class SearchSuggestionsAdapter extends SimpleCursorAdapter
-    {
-        private static final String[] mFields  = { "_id", "result" };
-        private static final String[] mVisible = { "result" };
-        private static final int[]    mViewIds = { android.R.id.text1 };
-
-
-        public SearchSuggestionsAdapter(Context context)
-        {
-            super(context, R.layout.suggestion_layout, null, mVisible, mViewIds, 0);
-        }
-
-        @Override
-        public Cursor runQueryOnBackgroundThread(CharSequence constraint)
-        {
-            return new SuggestionsCursor(constraint);
-        }
-
-        private static class SuggestionsCursor extends AbstractCursor
-        {
-            private ArrayList<String> mResults;
-
-            public SuggestionsCursor(CharSequence constraint)
-            {
-                final int count = 4;
-                mResults = new ArrayList<>(count);
-                for(int i = 0; i < count; i++){
-                    mResults.add("Result " + (i + 1));
-                }
-                if(!TextUtils.isEmpty(constraint)){
-                    String constraintString = constraint.toString().toLowerCase(Locale.ROOT);
-                    Iterator<String> iter = mResults.iterator();
-                    while(iter.hasNext()){
-                        if(!iter.next().toLowerCase(Locale.ROOT).startsWith(constraintString))
-                        {
-                            iter.remove();
-                        }
-                    }
-                }
-
-                if (mResults.size() > 0 && constraint != null && constraint.length() > 1) {
-                    MainActivity.runOnUI(new Runnable() {
-                        public void run() {
-                            MainActivity.searchView.setBackgroundResource(R.drawable.search_shadow_expanded);
-                        }
-                    });
-
-                }
-                else {
-                    MainActivity.runOnUI(new Runnable() {
-                        public void run() {
-                            MainActivity.searchView.setBackgroundResource(R.drawable.search_shadow_collapsed);
-                        }
-                    });
-                }
-            }
-
-            @Override
-            public int getCount()
-            {
-                return mResults.size();
-            }
-
-            @Override
-            public String[] getColumnNames()
-            {
-                return mFields;
-            }
-
-            @Override
-            public long getLong(int column)
-            {
-                if(column == 0){
-                    return mPos;
-                }
-                throw new UnsupportedOperationException("unimplemented");
-            }
-
-            @Override
-            public String getString(int column)
-            {
-                if(column == 1){
-                    return mResults.get(mPos);
-                }
-                throw new UnsupportedOperationException("unimplemented");
-            }
-
-            @Override
-            public short getShort(int column)
-            {
-                throw new UnsupportedOperationException("unimplemented");
-            }
-
-            @Override
-            public int getInt(int column)
-            {
-                throw new UnsupportedOperationException("unimplemented");
-            }
-
-            @Override
-            public float getFloat(int column)
-            {
-                throw new UnsupportedOperationException("unimplemented");
-            }
-
-            @Override
-            public double getDouble(int column)
-            {
-                throw new UnsupportedOperationException("unimplemented");
-            }
-
-            @Override
-            public boolean isNull(int column)
-            {
-                return false;
-            }
-        }
+    public static float pixelsToSp(Context context, float px) {
+        float scaledDensity = context.getResources().getDisplayMetrics().scaledDensity;
+        return px/scaledDensity;
     }
-
-//    public static float pixelsToSp(Context context, float px) {
-//        float scaledDensity = context.getResources().getDisplayMetrics().scaledDensity;
-//        return px/scaledDensity;
-//    }
 }

@@ -5,7 +5,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-class ContentFragmentAdapter extends FragmentPagerAdapter {
+public class ContentFragmentAdapter extends FragmentPagerAdapter {
     private static int NUM_ITEMS = 1;
     private final Context c;
 
